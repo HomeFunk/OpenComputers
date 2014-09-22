@@ -12,7 +12,7 @@ end
 local args, options = shell.parse(...)
 if #args < 1 then
   io.write("Usage: dig [-s] [-x] <size>\n")
-  io.write(" -xp: shows name and XP amount when done ")
+  io.write(" -x: shows name and XP amount when done\n")
   io.write(" -s: shutdown when done.")
   return
 end
