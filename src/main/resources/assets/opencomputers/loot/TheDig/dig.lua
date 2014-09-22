@@ -230,7 +230,7 @@ turnTowards(0)
 checkedDrop(true)
 
 if options.x then
-  print (robot.name() .. " does have " .. robot.level() .. " XP out of 30.0")
+  io.write (robot.name() .. " does have " .. robot.level() .. " XP out of 30.0")
 end
 
 if options.s then
