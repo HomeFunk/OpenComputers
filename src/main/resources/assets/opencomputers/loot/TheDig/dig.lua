@@ -11,7 +11,8 @@ end
 
 local args, options = shell.parse(...)
 if #args < 1 then
-  io.write("Usage: dig [-s] <size>\n")
+  io.write("Usage: dig [-s] [-x] <size>\n")
+  io.write(" -xp: shows name and XP amount when done ")
   io.write(" -s: shutdown when done.")
   return
 end
@@ -227,6 +228,10 @@ repeat until not digLayer()
 moveTo(0, 0, 0)
 turnTowards(0)
 checkedDrop(true)
+
+if options.x then
+  print (robot.name() .. " does have " .. robot.level() .. " XP out of 30.0")
+end
 
 if options.s then
   computer.shutdown()
