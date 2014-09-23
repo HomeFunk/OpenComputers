@@ -74,7 +74,6 @@ local function clearBlock(side, cannotRetry)
   while r.suck(side) do
     checkedDrop()
   end
---  io.write("Durability: " .. robot.durability() .. "\n")
   local result, reason = r.swing(side)
   if result then
     checkedDrop()
@@ -256,11 +255,14 @@ turnTowards(0)
 checkedDrop(true)
 
 if options.x then
-  local rawLevel = robot.level()
-  local curLevel = math.floor(rawLevel)
-  local levelProgress = math.floor((rawLevel - curLevel) * 100)
-  io.write (robot.name() .. " is level " .. curLevel .. " and is " .. levelProgress .. "% along to next level\n")
-  io.write ("rawLevel: " .. rawLevel .. "\n")
+  if not component.isAvailable("experience") then
+    return 0
+  else
+    local rawLevel = robot.level()
+    local curLevel = math.floor(rawLevel)
+    local levelProgress = math.floor((rawLevel - curLevel) * 100)
+    io.write (robot.name() .. " is level " .. curLevel .. " and is " .. levelProgress .. "% along to next level\n")
+  end
 end
 
 if options.s then
