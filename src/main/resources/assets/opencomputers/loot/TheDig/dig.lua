@@ -28,6 +28,25 @@ local x, y, z, f = 0, 0, 0, 0
 local dropping = false -- avoid recursing into drop()
 local delta = {[0] = function() x = x + 1 end, [1] = function() y = y + 1 end,
                [2] = function() x = x - 1 end, [3] = function() y = y - 1 end}
+local dur = robot.durability()
+
+local function toolCheck()
+  if dur ~= nil then
+    local newDur = robot.durability()
+    if newDur == nil then
+      io.write("Lost tool.\n")
+      return false
+    end
+    if dur < newDur then
+      io.write("Got more durability. Tool broke?\n")
+      return false
+    else
+      dur = newDur
+      io.write("[" .. dur .. "]\n")
+    end
+  end
+  return true
+end
 
 local function turnRight()
   robot.turnRight()
@@ -55,6 +74,7 @@ local function clearBlock(side, cannotRetry)
   while r.suck(side) do
     checkedDrop()
   end
+--  io.write("Durability: " .. robot.durability() .. "\n")
   local result, reason = r.swing(side)
   if result then
     checkedDrop()
@@ -63,6 +83,9 @@ local function clearBlock(side, cannotRetry)
     if cannotRetry and what ~= "air" and what ~= "entity" then
       return false
     end
+  end
+  if not toolCheck() then
+    return false
   end
   return true
 end
@@ -198,6 +221,9 @@ local function digLayer()
   ]]
   for i = 1, size do
     for j = 1, size - 1 do
+      if not toolCheck() then
+        return false
+      end
       if not step() then
         return false
       end
@@ -230,7 +256,11 @@ turnTowards(0)
 checkedDrop(true)
 
 if options.x then
-  io.write (robot.name() .. " does have " .. robot.level() .. " XP out of 30.0")
+  local rawLevel = robot.level()
+  local curLevel = math.floor(rawLevel)
+  local levelProgress = math.floor((rawLevel - curLevel) * 100)
+  io.write (robot.name() .. " is level " .. curLevel .. " and is " .. levelProgress .. "% along to next level\n")
+  io.write ("rawLevel: " .. rawLevel .. "\n")
 end
 
 if options.s then
