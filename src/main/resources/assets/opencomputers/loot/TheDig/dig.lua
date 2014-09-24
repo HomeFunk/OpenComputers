@@ -37,7 +37,7 @@ local function toolCheck()
       io.write("Lost tool.\n")
       return false
     end
-    if dur < newDur then
+    if dur + 10 < newDur then
       io.write("Got more durability. Tool broke?\n")
       return false
     else
